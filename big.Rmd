@@ -1,0 +1,166 @@
+---
+title: "大樂"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+ 
+
+```{r ,echo=F,warning=F,message=F }
+ 
+ library(stringr)
+library(ggplot2)
+ 
+library(tidyr)
+ 
+library(rvest)
+library(dplyr)
+library(XML)
+library(xml2)
+
+bingo=0
+mm=0
+
+ 
+ 
+#url="https://www.pilio.idv.tw/ltobig/list.asp?indexpage=1&orderby=new"
+ 
+
+
+
+
+c=NULL
+for (i in 1:83){
+url=paste("https://www.pilio.idv.tw/ltobig/list.asp?indexpage=",i,"&orderby=new",sep="")
+
+ 
+
+xx=url %>% read_html()%>% html_nodes("table.auto-style1")%>% html_nodes("tr")%>% html_nodes("td") %>%html_text()
+library(stringr)
+n=length(xx)
+
+ mydate=xx[seq(4,n,3)]
+myn=xx[seq(5,n,3)]%>%str_trim("both")  
+mys=xx[seq(6,n,3)]%>%str_trim("both")
+b=data.frame(mydate,myn,mys)
+
+c=rbind(c,b)}
+
+
+
+
+ 
+
+c1=c %>% separate(myn,c("v1","v2","v3","v4","v5","v6"))
+ 
+
+ 
+ 
+
+
+
+#c1$開獎日期=as.character(c1$開獎日期)
+ 
+#c1$開獎日期=as.Date(c$mydate,"%Y%m/%d")
+ 
+#c1$第二區=as.character(c1$第二區)
+# 
+  
+
+#c11=c1[order(c1$開獎日期),]
+
+ 
+ 
+write.csv(c1,"biglot.csv",row.names=FALSE)
+
+  
+ 
+xx=read.csv("biglot.csv") 
+ 
+ 
+#for (i in 2:8) c11[,i]=as.integer(c11[,i])
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+xx1=(xx[order(as.Date(xx[,1])),])
+ 
+```
+
+
+
+```{r ,echo=F,warning=F,message=F,eval=F}
+bingo4=0
+bingo5=0
+bingo6=0
+allbingo=NULL  
+yes=0
+bingo=0
+p=NULL
+iwant=NULL
+iwantm=NULL
+nn=(nrow(xx)-1000)
+ 
+
+for (i in 1:(1000)) {
+  p=c(p,as.numeric(xx1[i,2:8]))
+
+}for (j in 1:nn){ 
+
+
+
+
+a1001=as.integer(xx1[(1000+j),2:8])
+
+  t=rev(sort(table(p))) 
+iwant=c(iwant,which(names(t)%in%a1001))
+
+
+
+iwantm=rbind(iwantm,which(names(t)%in%a1001))
+a1002=as.integer(xx1[(1000+j+1),2:8])
+
+ p=c(p,a1001)
+  t=rev(sort(table(p))) 
+ guess=head(rev(sort(table(iwant))),10)
+
+#guessn=t[c(sample(1:10,5),sample(as.integer(names(guess)),5))]
+
+guessn= t[as.integer(names(guess))]
+
+if (j>=1) {bingo=sum(names(guessn) %in% a1002)}
+ 
+ 
+rev(t)
+
+ 
+#print(iwantm[j,])
+#print(paste("my guess is:" ,guess))
+if (bingo>=3) {print("myguess= ");print(names(guess));print(paste0("bingo is:  ",bingo));allbingo=c(allbingo,bingo);yes=yes+1;print(paste("yes= ",yes,j));print(paste("max= ",max(allbingo)))};
+
+print(guessn);
+print(a1002);
+
+if (bingo==3) {bingo3=bingo3+1; };
+if (bingo==4) {bingo4=bingo4+1; };  
+if (bingo==5) {bingo5=bingo5+1; };
+if (bingo==6) {bingo6=bingo6+1; }; 
+
+}
+
+ print(paste0("bingo3= ",bingo3));
+print(paste0("bingo4= ",bingo4));
+print(paste0("bingo5= ",bingo5));
+print(paste0("bingo6= ",bingo6));
+
+ 
+
+```
+ 
+
+    
